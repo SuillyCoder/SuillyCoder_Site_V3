@@ -33,6 +33,13 @@ export type SkillGroup = {
 
 type Result<T> = { data: T; error: null } | { data: []; error: string };
 
+function publicImageUrl(path: string | null): string | null {
+  if (!path || path === "EMPTY") return null;
+  if (/^https?:\/\//.test(path)) return path;
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  return base ? `${base}/storage/v1/object/public/${path}` : null;
+}
+
 export async function getProjects(category: string): Promise<Result<Project[]>> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -42,7 +49,10 @@ export async function getProjects(category: string): Promise<Result<Project[]>> 
     .order("created_at", { ascending: false });
 
   if (error) return { data: [], error: error.message };
-  return { data: (data ?? []) as Project[], error: null };
+   return {
+    data: ((data ?? []) as Project[]).map((p) => ({ ...p, image_path: publicImageUrl(p.image_path) })),
+    error: null,
+  };
 }
 
 export async function getSkillGroups(): Promise<Result<SkillGroup[]>> {
@@ -75,5 +85,8 @@ export async function getCertifications(): Promise<Result<Certification[]>> {
     .order("created_at", { ascending: false });
 
   if (error) return { data: [], error: error.message };
-  return { data: (data ?? []) as Certification[], error: null };
+    return {
+    data: ((data ?? []) as Certification[]).map((c) => ({ ...c, image_path: publicImageUrl(c.image_path) })),
+    error: null,
+  };
 }
