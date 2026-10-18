@@ -95,7 +95,7 @@ async function CertificationsSection() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {certifications.map((cert) => (
-        <div key={cert.id} className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
+        <div key={cert.id} className="relative group bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
           <div className="relative h-32 bg-zinc-200 dark:bg-zinc-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
             {cert.image_path ? (
               <Image

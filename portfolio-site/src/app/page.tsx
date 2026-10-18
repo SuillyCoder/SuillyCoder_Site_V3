@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ContactForm } from "@/components/ContactForm";
 
 export default function Home() {
   return (
@@ -120,10 +121,10 @@ export default function Home() {
                     <div>
                       <p className="text-zinc-600 dark:text-zinc-400 mb-1">Email</p>
                       <a
-                        href="mailto:contact@suillycoder.com"
+                        href="mailto:jlcbasuil@gmail.com"
                         className="text-zinc-900 dark:text-zinc-50 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                       >
-                        contact@suillycoder.com
+                        jlcbasuil@gmail.com
                       </a>
                     </div>
                     <div>
@@ -140,7 +141,7 @@ export default function Home() {
                     <div>
                       <p className="text-zinc-600 dark:text-zinc-400 mb-1">LinkedIn</p>
                       <a
-                        href="#"
+                        href="https://www.linkedin.com/in/jesus-lorenzo-basuil-b9150431b/?isSelfProfile=true"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-zinc-900 dark:text-zinc-50 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
@@ -155,47 +156,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
                     Send a Message
                   </h3>
-                  <form className="space-y-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Your name"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-                        Message
-                      </label>
-                      <textarea
-                        id="message"
-                        rows={4}
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Your message..."
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full px-6 py-3 bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 rounded-lg font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
-                    >
-                      Send Message
-                    </button>
-                  </form>
+                    <ContactForm />
                 </div>
               </div>
             </div>

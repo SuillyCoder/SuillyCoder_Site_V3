@@ -36,8 +36,8 @@ export async function ProjectsSection({ category }: { category: Category }) {
             </a>
           )}
           {project.description && (
-            <div className="pointer-events-none absolute inset-x-0 top-full z-20 mt-2 whitespace-pre-line rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700 opacity-0 shadow-xl transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-1000 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-              {project.description}
+            <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-2xl border border-zinc-200 bg-white p-6 opacity-0 shadow-xl transition-opacity duration-200 group-hover:opacity-100 group-hover:delay-1000 dark:border-zinc-700 dark:bg-zinc-800">
+              <p className="line-clamp-10 whitespace-pre-line text-sm text-zinc-700 dark:text-zinc-200">{project.description}</p>
             </div>
           )}
         </div>
