@@ -1,29 +1,33 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const horizon = localFont({
+  src: "../fonts/Horizon-nMeM.ttf",
+  variable: "--font-horizon",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const oita = localFont({
+  src: "../fonts/Oita-Expanded3-Exfont3652.otf",
+  variable: "--font-oita",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "SuillyCoder - Portfolio",
-  description: "Full Stack Developer | Data Scientist | Hardware Enthusiast",
+  description: "Portfolio of SuillyCoder",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${horizon.variable} ${oita.variable}`}>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

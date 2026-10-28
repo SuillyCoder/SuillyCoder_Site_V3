@@ -3,7 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+   --font-subtitle: Calibri, Carlito, sans-serif;
 }
+
 
 @theme inline {
   --color-background: var(--background);
@@ -12,10 +14,34 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Page transitions: fade in on load, fade out before navigating */
+#page-root {
+  animation: page-in 600ms ease-out both;
+  transition: opacity 350ms ease-in, transform 350ms ease-in;
+}
+
+#page-root.is-leaving {
+  animation: none;
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #page-root,
+  #page-root.is-leaving {
+    animation: none;
+    transition: none;
   }
 }
 
