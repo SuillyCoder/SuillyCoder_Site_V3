@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Ping Supabase
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/projects?select=id&limit=1" \
