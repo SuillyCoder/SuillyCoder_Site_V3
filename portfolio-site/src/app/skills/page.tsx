@@ -1,5 +1,5 @@
 // src/app/skills/page.tsx
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import Image from "next/image";
 import { getCertifications, getSkillGroups } from "@/lib/portfolio-data";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -10,40 +10,25 @@ export default function SkillsPage() {
     <div className="min-h-screen bg-white font-[family-name:var(--font-subtitle)] text-slate-800">
       <SiteHeader />
 
-      <main className="mx-auto max-w-6xl px-5 pb-24 pt-32 sm:px-8">
+      <main className="mx-auto max-w-5xl px-5 pb-24 pt-32 sm:px-8">
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.4em] text-sky-700 sm:text-sm">Skills</p>
-          <h1 className="mt-3 font-[family-name:var(--font-horizon)] text-3xl leading-tight text-slate-900 sm:text-5xl">
-            Skills &amp; Certifications
+          <h1 className="text-center font-[family-name:var(--font-horizon)] text-3xl leading-tight text-slate-900 sm:text-5xl">
+            Skills and Certifications
           </h1>
         </Reveal>
 
         <section className="mt-16" aria-labelledby="technical-skills">
-          <Reveal>
-            <h2
-              id="technical-skills"
-              className="font-[family-name:var(--font-oita)] text-2xl text-slate-900 sm:text-3xl"
-            >
-              Technical Skills
-            </h2>
-          </Reveal>
-          <div className="mt-8">
+          <SectionPill id="technical-skills">Technical Skills</SectionPill>
+          <div className="mt-12">
             <Suspense fallback={<StatusMessage>Loading skills…</StatusMessage>}>
               <SkillsSection />
             </Suspense>
           </div>
         </section>
 
-        <section className="mt-20" aria-labelledby="certifications">
-          <Reveal>
-            <h2
-              id="certifications"
-              className="font-[family-name:var(--font-oita)] text-2xl text-slate-900 sm:text-3xl"
-            >
-              Certifications
-            </h2>
-          </Reveal>
-          <div className="mt-8">
+        <section className="mt-24" aria-labelledby="certifications">
+          <SectionPill id="certifications">Certifications</SectionPill>
+          <div className="mt-12">
             <Suspense fallback={<StatusMessage>Loading certifications…</StatusMessage>}>
               <CertificationsSection />
             </Suspense>
@@ -54,12 +39,52 @@ export default function SkillsPage() {
   );
 }
 
-function StatusMessage({ children }: { children: React.ReactNode }) {
-  return <p className="text-slate-500">{children}</p>;
+function StatusMessage({ children }: { children: ReactNode }) {
+  return <p className="text-center text-slate-500">{children}</p>;
 }
 
-// Runs at request time (inside <Suspense>), so edits made in the admin app
-// show up on the next page load.
+// Turns "2026-03-15" into "March 2026". Parsing with a time avoids timezone shifts.
+function formatCompletion(value: string | null): string | null {
+  if (!value) return null;
+  const date = new Date(`${value}T00:00:00`);
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+
+// Light blue pill heading with small hexagons peeking out, matching the category pills
+function SectionPill({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <div className="relative mx-auto w-fit">
+      <DecorHex className="-left-8 -top-5 w-10" delay={0} />
+      <DecorHex className="-right-6 -bottom-4 w-8" delay={1.1} />
+      <h2
+        id={id}
+        className="relative inline-flex min-h-12 items-center rounded-full bg-sky-500 px-10 py-3 font-[family-name:var(--font-oita)] text-2xl text-white shadow-lg shadow-sky-200 sm:text-3xl"
+      >
+        {children}
+      </h2>
+    </div>
+  );
+}
+
+function DecorHex({ className, delay }: { className: string; delay: number }) {
+  return (
+    <div
+      className={`hex-float pointer-events-none absolute ${className}`}
+      style={{ animationDelay: `${delay}s` }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 100 86.6" className="block w-full">
+        <polygon
+          points="25,0 75,0 100,43.3 75,86.6 25,86.6 0,43.3"
+          fill="#7dd3fc"
+          fillOpacity={0.5}
+        />
+      </svg>
+    </div>
+  );
+}
+
+// Category label as the card title, skill names as tags
 async function SkillsSection() {
   const { data: groups, error } = await getSkillGroups();
 
@@ -67,15 +92,15 @@ async function SkillsSection() {
   if (groups.length === 0) return <StatusMessage>No skills added yet.</StatusMessage>;
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {groups.map((group, index) => (
-        <Reveal key={group.category} delay={(index % 3) * 120} className="h-full">
-          <article className="h-full rounded-2xl border border-sky-100 bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-100">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      {groups.map((skillGroup) => (
+        <Reveal key={skillGroup.category} className="h-full">
+          <article className="h-full rounded-2xl border border-sky-100 bg-white p-6 shadow-sm">
             <h3 className="font-[family-name:var(--font-oita)] text-xl text-slate-900">
-              {group.category}
+              {skillGroup.category}
             </h3>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {group.skills.map((skill) => (
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {skillGroup.skills.map((skill) => (
                 <li
                   key={skill.id}
                   className="rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-sm text-sky-800"
@@ -91,6 +116,8 @@ async function SkillsSection() {
   );
 }
 
+// Full certificate screenshot on top, name and bullet points underneath
+// Full certificate screenshot on top, name, date and bullet points underneath
 async function CertificationsSection() {
   const { data: certifications, error } = await getCertifications();
 
@@ -98,48 +125,45 @@ async function CertificationsSection() {
   if (certifications.length === 0) return <StatusMessage>No certifications added yet.</StatusMessage>;
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {certifications.map((cert, index) => (
-        <Reveal key={cert.id} delay={(index % 3) * 120} className="h-full">
-          <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-sky-100 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-100">
-            {/* Certificate image, or a gradient placeholder when there isn't one yet */}
-            <div className="relative h-40 overflow-hidden bg-gradient-to-br from-sky-100 via-white to-sky-300">
-              {cert.image_path && (
-                <Image
-                  src={cert.image_path}
-                  alt={cert.name}
-                  fill
-                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-              )}
-            </div>
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+      {certifications.map((cert) => {
+        const completed = formatCompletion(cert.completed_on);
+        return (
+          <Reveal key={cert.id} className="h-full">
+            <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-sky-100 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-100">
+              <div className="relative aspect-[16/10] w-full border-b border-sky-100 bg-white">
+                {cert.image_path ? (
+                  <Image
+                    src={cert.image_path}
+                    alt={cert.name}
+                    fill
+                    sizes="(min-width: 768px) 40vw, 92vw"
+                    className="object-contain p-2"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-sky-100 via-white to-sky-300" />
+                )}
+              </div>
 
-            <div className="flex flex-1 flex-col p-6">
-              <h3 className="font-[family-name:var(--font-oita)] text-xl text-slate-900">
-                {cert.name}
-              </h3>
-
-              {cert.description && (
-                <p className="mt-3 line-clamp-3 whitespace-pre-line text-slate-500">
-                  {cert.description}
-                </p>
-              )}
-
-              {cert.link && (
-                <a
-                  href={cert.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-auto inline-flex min-h-11 w-fit items-center self-start rounded-full bg-sky-700 px-5 text-sm font-medium text-white transition-colors hover:bg-sky-800"
-                >
-                  View Certificate
-                </a>
-              )}
-            </div>
-          </article>
-        </Reveal>
-      ))}
+              <div className="flex flex-1 flex-col p-6">
+                <h3 className="font-[family-name:var(--font-oita)] text-xl text-slate-900">
+                  {cert.name}
+                </h3>
+                {completed && (
+                  <p className="mt-1 text-sm text-sky-700">Completed {completed}</p>
+                )}
+                {(cert.highlights ?? []).length > 0 && (
+                  <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-500 marker:text-sky-500 sm:text-base">
+                    {(cert.highlights ?? []).map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </article>
+          </Reveal>
+        );
+      })}
     </div>
   );
 }

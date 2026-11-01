@@ -23,7 +23,8 @@ export type Certification = {
   name: string;
   link: string | null;
   image_path: string | null;
-  description: string | null;
+  highlights: string[] | null;
+  completed_on: string | null;
 };
 
 export type SkillGroup = {
@@ -81,7 +82,7 @@ export async function getCertifications(): Promise<Result<Certification[]>> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("certifications")
-    .select("id, name, link, image_path, description")
+    .select("id, name, link, image_path, highlights, completed_on")
     .order("created_at", { ascending: false });
 
   if (error) return { data: [], error: error.message };
@@ -89,4 +90,69 @@ export async function getCertifications(): Promise<Result<Certification[]>> {
     data: ((data ?? []) as Certification[]).map((c) => ({ ...c, image_path: publicImageUrl(c.image_path) })),
     error: null,
   };
+}
+
+export type ShowcaseCategory = {
+  slug: string;
+  title: string;
+  summary: string | null;
+  projects: { id: number; name: string; image_path: string | null }[];
+};
+
+export async function getShowcaseCategories(): Promise<Result<ShowcaseCategory[]>> {
+  const supabase = await createClient();
+
+  const { data: categories, error: categoriesError } = await supabase
+    .from("project_categories")
+    .select("slug, title, summary")
+    .order("sort_order", { ascending: true })
+    .limit(3);
+  if (categoriesError) return { data: [], error: categoriesError.message };
+
+  const { data: projects, error: projectsError } = await supabase
+    .from("projects")
+    .select("id, name, category, image_path")
+    .order("created_at", { ascending: false });
+  if (projectsError) return { data: [], error: projectsError.message };
+
+  const rows = (projects ?? []) as {
+    id: number;
+    name: string;
+    category: string;
+    image_path: string | null;
+  }[];
+
+  return {
+    data: (categories ?? []).map((c) => ({
+      slug: c.slug,
+      title: c.title,
+      summary: c.summary,
+      projects: rows
+        .filter((p) => p.category === c.slug)
+        .slice(0, 3)
+        .map((p) => ({ id: p.id, name: p.name, image_path: publicImageUrl(p.image_path) })),
+    })),
+    error: null,
+  };
+}
+
+export type ProjectCategoryMeta = {
+  slug: string;
+  title: string;
+  summary: string | null;
+};
+
+export async function getProjectCategory(
+  slug: string,
+): Promise<{ data: ProjectCategoryMeta | null; error: string | null }> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("project_categories")
+    .select("slug, title, summary")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (error) return { data: null, error: error.message };
+  return { data: data ?? null, error: null };
 }

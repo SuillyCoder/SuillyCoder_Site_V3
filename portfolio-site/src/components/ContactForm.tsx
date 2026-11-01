@@ -6,8 +6,8 @@ import { sendContactMessage, type ContactState } from "@/app/actions/contact";
 const initialState: ContactState = { status: "idle", message: "" };
 
 const fieldClass =
-  "w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500";
-const labelClass = "block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1";
+  "w-full px-4 py-2 rounded-lg border border-sky-200 dark:border-sky-200 bg-white dark:bg-white text-zinc-700 dark:text-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500";
+const labelClass = "block text-sm font-medium text-zinc-900 dark:text-zinc-900 mb-1";
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(sendContactMessage, initialState);
@@ -39,7 +39,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full px-6 py-3 bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 rounded-lg font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full px-6 py-3 bg-sky-600 text-zinc-50 rounded-lg font-medium hover:bg-sky-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {pending ? "Sending…" : "Send Message"}
       </button>

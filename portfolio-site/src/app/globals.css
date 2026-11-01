@@ -50,3 +50,24 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Hex showcase: gentle floating */
+.hex-float {
+  animation: hex-float 6s ease-in-out infinite;
+}
+
+@keyframes hex-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-float {
+    animation: none;
+  }
+}

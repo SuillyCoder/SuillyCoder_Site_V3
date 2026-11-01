@@ -11,7 +11,7 @@ const categories: { key: ProjectCategory; href: string; label: string }[] = [
 
 export function ProjectsSubnav({ active }: { active: ProjectCategory }) {
   return (
-    <nav aria-label="Project categories" className="mt-8 flex flex-wrap gap-3">
+    <nav aria-label="Project categories" className="mt-8 flex flex-wrap justify-center gap-3">
       {categories.map((category) => {
         const isActive = category.key === active;
         return (
