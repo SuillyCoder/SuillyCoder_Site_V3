@@ -267,10 +267,13 @@ export default function Home() {
                 About Me
               </h2>
               <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-slate-500 sm:text-lg">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-                ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis
-                dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies
-                nec, pellentesque eu, pretium quis, sem.
+                Hey there! I'm Jesus Lorenzo Basuil: a 22-year old Cebuano student-dev with over 3 years of
+                experience with projects in Full-Stack Development, Data Science, Artificial Intelligence, 
+                Machine Learning, and even Hardware-related fields like Embedded Systems and Computer Vision. 
+                I've been studying Computer Engineering at the University of San Carlos, which helped develop
+                my academic rigor, problem-solving mindset, and my tech-related skills. I'm learning a lot, and 
+                I'm always looking forward to learning more!
+
               </p>
             </Reveal>
           </div>
