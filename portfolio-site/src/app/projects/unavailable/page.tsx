@@ -1,6 +1,7 @@
 // src/app/projects/unavailable/page.tsx
 import { SiteHeader } from "@/components/SiteHeader";
 import Link from "next/link";
+import { Suspense } from "react";
 
 type SearchParams = Promise<{ reason?: string; project?: string }>;
 
@@ -17,7 +18,8 @@ const messages: Record<string, { title: string; body: string }> = {
 
 const HEX_POINTS = "25,0 75,0 100,43.3 75,86.6 25,86.6 0,43.3";
 
-export default async function UnavailablePage({
+
+async function UnavailableContent({
   searchParams,
 }: {
   searchParams: SearchParams;
@@ -80,6 +82,23 @@ export default async function UnavailablePage({
             Home
           </Link>
         </div>
+      </main>
+    </div>
+  );
+}
+
+export default function UnavailablePage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  return (
+    <div className="min-h-screen bg-white font-[family-name:var(--font-subtitle)] text-slate-800">
+      <SiteHeader />
+      <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-5 pt-24 text-center">
+        <Suspense fallback={null}>
+          <UnavailableContent searchParams={searchParams} />
+        </Suspense>
       </main>
     </div>
   );
